@@ -44,10 +44,13 @@ async def restart_container(ctx):
         return
 
     await ctx.send("🔄 Restarting container...")
+
     try:
-        subprocess.run(["docker", "restart", TARGET_CONTAINER], check=True)
+        client = docker.DockerClient(base_url='unix://var/run/docker.sock')
+        container = client.containers.get(TARGET_CONTAINER)
+        container.restart()
         await ctx.send(f"✅ Container `{TARGET_CONTAINER}` restarted.")
-    except subprocess.CalledProcessError as e:
+    except Exception as e:
         await ctx.send(f"❌ Failed to restart container: {e}")
 
 bot.run(TOKEN)
