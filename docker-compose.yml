@@ -5,3 +5,8 @@ services:
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - AUTHORIZED_CHANNEL_ID=${AUTHORIZED_CHANNEL_ID}
+      - TARGET_CONTAINER=${TARGET_CONTAINER}
+
