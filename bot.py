@@ -1,8 +1,9 @@
 print("🛠️ Starting Discord bot...")
 
 import os
-import docker
 import discord
+import subprocess
+import docker
 from discord.ext import commands
 from dotenv import load_dotenv
 
@@ -44,11 +45,9 @@ async def restart_container(ctx):
 
     await ctx.send("🔄 Restarting container...")
     try:
-        client = docker.DockerClient(base_url='unix://var/run/docker.sock')
-        client.containers.get(TARGET_CONTAINER).restart()
+        subprocess.run(["docker", "restart", TARGET_CONTAINER], check=True)
         await ctx.send(f"✅ Container `{TARGET_CONTAINER}` restarted.")
-    except Exception as e:
+    except subprocess.CalledProcessError as e:
         await ctx.send(f"❌ Failed to restart container: {e}")
-        print(f"❌ Docker SDK error: {e}")
 
 bot.run(TOKEN)
